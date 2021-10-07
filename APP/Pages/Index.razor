@@ -1,5 +1,7 @@
 ﻿@page "/"
+@using Models
 @inject NavigationManager Navigation
+@inject HttpClient Http
 
 <div class="d-flex row align-items-start">
 
@@ -22,10 +24,13 @@
     <div class="col text-center">
         <AuthorizeView>
             <Authorized>
-                    <button type="button" class="btn btn-lg text-light"style="background-color:#AD0000;border-color: #9B0000;"  @onclick="NavigateToMesPerso">Commencer</button>
+                <button type="button" class="btn btn-lg text-light"
+                    style="background-color:#AD0000;border-color: #9B0000;"
+                    @onclick="NavigateToMesPerso">Commencer</button>
             </Authorized>
             <NotAuthorized>
-                    <button type="button" class="btn btn-lg text-light"style="background-color:#AD0000;border-color: #9B0000;"  @onclick="BeginSignin">Commencer</button>
+                <button type="button" class="btn btn-lg text-light"
+                    style="background-color:#AD0000;border-color: #9B0000;" @onclick="BeginSignin">Commencer</button>
             </NotAuthorized>
         </AuthorizeView>
     </div>
@@ -42,7 +47,7 @@
         </div>
     </div>
     <div class="col-2 ">
-        1er
+        @podium.First().Name
         <div class="bg-warning">
             <br /><br /><br />
         </div>
@@ -55,11 +60,16 @@
     </div>
 </div>
 
-@code{
+@code {
+    private Hero[] podium;
+    protected override async Task OnInitializedAsync()
+    {
+        podium = await Http.GetFromJsonAsync<Hero[]>("http://localhost:5001/Hero/podium");
+    }
     private async Task NavigateToMesPerso(MouseEventArgs args)
     {
         Navigation.NavigateTo("/mesperso");
-    }    
+    }
     private async Task BeginSignin(MouseEventArgs args)
     {
         Navigation.NavigateTo("authentication/login");
