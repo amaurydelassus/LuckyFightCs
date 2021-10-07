@@ -167,26 +167,5 @@ namespace API.Controllers
                 }
             }
         }
-
-        [HttpPut]
-        [Route("fight/{id}")]
-        public IActionResult UpdateFight(int id)
-        {
-            using (var db = new DatabaseContext())
-            {
-                Hero hero = db.Heroes.Find(id);
-                if (hero == null)
-                {
-                    return NoContent();
-                }
-                else
-                {
-                    hero.NbFights = hero.NbFights++;
-                    db.Update (hero);
-                    db.SaveChanges();
-                    return Ok($"Hero {id} {hero.Name} was in a fight");
-                }
-            }
-        }
     }
 }
