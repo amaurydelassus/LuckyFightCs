@@ -31,15 +31,31 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Route("new")]
-        public IActionResult PostUser(User user)
+        [Route("new/{email}")]
+        public IActionResult PostUser(string email)
         {
             using (var db = new DatabaseContext())
             {
-                user.Id = 0;
+                User user = { 0, email };
                 db.Users.Add (user);
                 db.SaveChanges();
                 return Ok($"User {user.Id} added");
+            }
+        }
+
+        [HttpGet]
+        [Route("get/{email}")]
+        public User GetUserFromEmail(string email)
+        {
+            using (var db = new DatabaseContext())
+            {
+                var user =
+                    db
+                        .Users
+                        .Where(u => u.Email == email)
+                        .ToList()
+                        .FirstOrDefault(null);
+                return user;
             }
         }
     }
