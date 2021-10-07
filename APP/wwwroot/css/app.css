@@ -8,10 +8,10 @@ a, .btn-link {
     color: #0366d6;
 }
 
-.btn-primary {
+.btn-start {
     color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    background-color: #AD0000;
+    border-color: #9B0000;
 }
 
 .content {
@@ -29,6 +29,7 @@ a, .btn-link {
 .validation-message {
     color: red;
 }
+
 
 #blazor-error-ui {
     background: lightyellow;
