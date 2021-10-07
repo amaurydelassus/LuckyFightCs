@@ -47,7 +47,6 @@
         </div>
     </div>
     <div class="col-2 ">
-        @podium.First().Name
         <div class="bg-warning">
             <br /><br /><br />
         </div>
@@ -61,11 +60,6 @@
 </div>
 
 @code {
-    private Hero[] podium;
-    protected override async Task OnInitializedAsync()
-    {
-        podium = await Http.GetFromJsonAsync<Hero[]>("http://localhost:5001/Hero/podium");
-    }
     private async Task NavigateToMesPerso(MouseEventArgs args)
     {
         Navigation.NavigateTo("/mesperso");

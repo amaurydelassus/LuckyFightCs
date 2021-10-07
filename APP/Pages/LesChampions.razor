@@ -5,7 +5,7 @@
 <h1>Les champions</h1>
 <p>Voici la liste des heros</p>
 
-@if (heros == null)
+@if (@heros == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -22,15 +22,15 @@ else
             </tr>
         </thead>
         <tbody>
-            @for(var i = 1;i < heros.Count();i++)
+            @for (var @i = 0; i < heros.Count(); i++)
             {
                 <tr>
-                    <td>i</td>
-                    <td>heros[i].Name</td>
-                    <td>heros[i].User</td>
-                    <td>heros[i].Pv</td>
-                    <td>heros[i].Atk</td>
-                    <td>heros[i].NbFights</td>
+                    <td>@i+1</td>
+                    <td>@heros[i].Name</td>
+                    <td>@heros[i].User</td>
+                    <td>@heros[i].Pv</td>
+                    <td>@heros[i].Atk</td>
+                    <td>@heros[i].NbFights</td>
                 </tr>
             }
         </tbody>
