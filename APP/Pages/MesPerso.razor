@@ -25,26 +25,40 @@ else
             <tbody>
                 @for (@i = 0; i < heros.Count(); i++)
                 {
-                    var @link = $"train/{@heros[i].Id}";
+                    var @linkTrain = $"train/{@heros[i].Id}";
+                    var @linkDelete = $"delete/{@heros[i].Id}";
                     <tr>
                         <td>@heros[i].Name</td>
                         <td>@heros[i].Pv</td>
                         <td>@heros[i].Atk</td>
                         <td>@heros[i].NbFights</td>
                         <td> 
-                            <NavLink class="nav-link text-danger" href=@link>
+                            <NavLink class="nav-link text-danger" href=@linkTrain>
                                 <span class="oi oi-heart" aria-hidden="true"></span>
+                            </NavLink>
+                        </td>                        
+                        <td> 
+                            <NavLink class="nav-link text-danger" href="@linkDelete">
+                                <span class="oi oi-minus" aria-hidden="true"></span>
                             </NavLink>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
+        @for (int i = 0; i < 5; i++)
+        {
+            var j = i;
+            <button @onclick="()=>Log(j)">@i</button>
+        }
     }
 }
-@code {
-    private Hero[] heros;
 
+
+@code {
+
+    private Hero[] heros;
+    
     private int i = 0;
 
     protected override async Task OnInitializedAsync()
@@ -56,5 +70,9 @@ else
     {
         Console.WriteLine(heros[i]);
         Navigation.NavigateTo("train");
+    }
+    void Log(int i)
+    {
+        Navigation.NavigateTo($"{i}");
     }
 }
