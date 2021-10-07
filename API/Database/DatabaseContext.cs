@@ -13,7 +13,10 @@ namespace API.Database
             DbContextOptionsBuilder optionsBuilder
         )
         {
-            optionsBuilder.UseSqlite($"Data Source=Database/database.db");
+            //optionsBuilder.UseSqlite($"Data Source=Database/database.db");
+            optionsBuilder
+                .UseMySql("server=localhost;database=luckyfightcs_database;user=admin;password=admin",
+                new MySqlServerVersion("5.7.31"));
         }
     }
 }
