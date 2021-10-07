@@ -6,11 +6,18 @@
 
 <AuthorizeView>
     <Authorized>
-        Hello, @context.User.Identity.Name!
-        <a href="#" @onclick="BeginSignOut">Log out</a>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="#" @onclick="BeginSignOut">
+                <span class="oi oi-key" aria-hidden="true"></span> Se deconnecter
+            </NavLink>
+        </li>
     </Authorized>
     <NotAuthorized>
-        <a href="authentication/login">Log in</a>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="authentication/login">
+                <span class="oi oi-key" aria-hidden="true"></span> Se connecter
+            </NavLink>
+        </li>
     </NotAuthorized>
 </AuthorizeView>
 
