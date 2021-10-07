@@ -1,4 +1,60 @@
 @page "/mesperso"
 @inject HttpClient Http
+@using APP.Models
+@using System.Diagnostics
+@inject NavigationManager Navigation
 @attribute [Authorize]
 <h1>Mes perso</h1>
+@if (@heros == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    if(@heros.Count() != 0)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>PV</th>
+                    <th>Attaque</th>
+                    <th>Nombre de Combats</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (@i = 0; i < heros.Count(); i++)
+                {
+                    var @link = $"train/{@heros[i].Id}";
+                    <tr>
+                        <td>@heros[i].Name</td>
+                        <td>@heros[i].Pv</td>
+                        <td>@heros[i].Atk</td>
+                        <td>@heros[i].NbFights</td>
+                        <td> 
+                            <NavLink class="nav-link text-danger" href=@link>
+                                <span class="oi oi-heart" aria-hidden="true"></span>
+                            </NavLink>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+@code {
+    private Hero[] heros;
+
+    private int i = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        heros = await Http.GetFromJsonAsync<Hero[]>("https://localhost:5001/Hero/myheroes/1");
+    }
+
+    private async Task TrainNavigate(MouseEventArgs args, int id)
+    {
+        Console.WriteLine(heros[i]);
+        Navigation.NavigateTo("train");
+    }
+}
