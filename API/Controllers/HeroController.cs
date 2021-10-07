@@ -30,7 +30,7 @@ namespace API.Controllers
                     db
                         .Heroes
                         .Include(h => h.User)
-                        .OrderBy(h => h.NbFights)
+                        .OrderByDescending(h => h.NbFights)
                         .ToList();
                 return heroes;
             }
@@ -84,6 +84,17 @@ namespace API.Controllers
                         .OrderBy(h => h.NbFights)
                         .ToList();
                 return heroes;
+            }
+        }
+
+        [HttpGet]
+        [Route("onehero/{id}")]
+        public Hero GetOneHero(int id)
+        {
+            using (var db = new DatabaseContext())
+            {
+                var hero = db.Heroes.Find(id);
+                return hero;
             }
         }
 
