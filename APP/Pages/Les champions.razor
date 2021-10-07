@@ -1,0 +1,46 @@
+﻿@page "/fetchdata"
+@inject HttpClient Http
+@using APP.Models
+
+<h1>Les champions</h1>
+<p>Voici la liste des heros</p>
+
+@if (heros == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Position</th>
+                <th>Nom</th>
+                <th>PV</th>
+                <th>Attaque</th>
+                <th>Nombre de Combats</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for(var i = 1;i < heros.Count();i++)
+            {
+                <tr>
+                    <td>i</td>
+                    <td>heros[i].Name</td>
+                    <td>heros[i].User</td>
+                    <td>heros[i].Pv</td>
+                    <td>heros[i].Atk</td>
+                    <td>heros[i].NbFights</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    private Hero[] heros;
+
+    protected override async Task OnInitializedAsync()
+    {
+        heros = await Http.GetFromJsonAsync<Hero[]>("https://localhost:5001/Hero");
+    }
+}
