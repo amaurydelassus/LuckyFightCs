@@ -142,35 +142,51 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        [Route("name/{id}&{name}")]
-        public IActionResult UpdateName(int id, string name)
+        [Route("name/{id}")]
+        public IActionResult UpdateName(int id, Hero hero)
         {
-            // using (var db = new DatabaseContext())
-            // {
-            //     Hero hero = db.Heroes.Where(h => h.Id == id).ToList().FirstOrDefault(null);
-            //     if (hero == null)
-            //     {
-            //         return NoContent();
-            //     }
-            //     else
-            //     {
-            //         hero.Name = name;
-            //         db.Update (hero);
-            //         return Ok($"Hero {id} is now named {name}");
-            //     }
-            // }
-            return NoContent();
+            using (var db = new DatabaseContext())
+            {
+                Hero h = db.Heroes.Find(id);
+                if (h == null)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    h.Name = hero.Name;
+                    h.Icon = hero.Icon;
+                    h.Pv = hero.Pv;
+                    h.Atk = hero.Atk;
+                    h.IsSwag = hero.IsSwag;
+                    h.NbFights = hero.NbFights;
+                    h.IsChampion = hero.IsChampion;
+                    db.Update (h);
+                    db.SaveChanges();
+                    return Ok($"Hero {id} {hero.Name} is updated");
+                }
+            }
         }
 
         [HttpPut]
-        [Route("icon/{id}&{icon}")]
-        public IActionResult UpdateIcon(int id, string icon)
+        [Route("fight/{id}")]
+        public IActionResult UpdateFight(int id)
         {
-            // using (var db = new DatabaseContext())
-            // {
-            //     return NoContent();
-            // }
-            return NoContent();
+            using (var db = new DatabaseContext())
+            {
+                Hero hero = db.Heroes.Find(id);
+                if (hero == null)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    hero.NbFights = hero.NbFights++;
+                    db.Update (hero);
+                    db.SaveChanges();
+                    return Ok($"Hero {id} {hero.Name} was in a fight");
+                }
+            }
         }
     }
 }
