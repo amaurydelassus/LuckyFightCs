@@ -9,7 +9,7 @@
 
 </div>
 
-@if (@heros == null)
+@if (@heroes == null)
 {
     <div class="d-flex flex-row align-items-center">
         <br /><br />
@@ -53,19 +53,19 @@
         </div>
     </div>
     <div class="col-2 text-center">
-            <br /><br />
+        <br /><br />
     </div>
     <div class="d-flex flex-row align-items-center">
         <div class="col text-center">
             <AuthorizeView>
                 <Authorized>
                     <button type="button" class="btn btn-lg text-light"
-                        style="background-color:#AD0000;border-color: #9B0000;"
-                        @onclick="NavigateToMesPerso">Commencer</button>
+                    style="background-color:#AD0000;border-color: #9B0000;"
+                    @onclick="NavigateToMesPerso">Commencer</button>
                 </Authorized>
                 <NotAuthorized>
                     <button type="button" class="btn btn-lg text-light"
-                        style="background-color:#AD0000;border-color: #9B0000;" @onclick="BeginSignin">Commencer</button>
+                    style="background-color:#AD0000;border-color: #9B0000;" @onclick="BeginSignin">Commencer</button>
                 </NotAuthorized>
             </AuthorizeView>
         </div>
@@ -81,19 +81,19 @@ else
         <div class="col-2 text-center">
             <img src="./carte.png" class="img-fluid" alt="Responsive image">
             <div class="bg-warning">
-                <br />@heros[1].Name
+                <br />@heroes[1].Name
             </div>
         </div>
         <div class="col-2 text-center font-italic">
             <img src="./carte.png" class="img-fluid" alt="Responsive image">
             <div class="bg-warning">
-                <br /><br />@heros[0].Name
+                <br /><br />@heroes[0].Name
             </div>
         </div>
         <div class="col-2 text-center">
             <img src="./carte.png" class="img-fluid" alt="Responsive image">
             <div class="bg-warning">
-                @heros[2].Name
+                @heroes[2].Name
             </div>
         </div>
     </div>
@@ -118,30 +118,30 @@ else
         </div>
     </div>
     <div class="col-2 text-center">
-            <br /><br />
+        <br /><br />
     </div>
     <div class="d-flex flex-row align-items-center">
         <div class="col text-center">
             <AuthorizeView>
                 <Authorized>
                     <button type="button" class="btn btn-lg text-light"
-                        style="background-color:#AD0000;border-color: #9B0000;"
-                        @onclick="NavigateToMesPerso">Commencer</button>
+                    style="background-color:#AD0000;border-color: #9B0000;"
+                    @onclick="NavigateToMesPerso">Commencer</button>
                 </Authorized>
                 <NotAuthorized>
                     <button type="button" class="btn btn-lg text-light"
-                        style="background-color:#AD0000;border-color: #9B0000;" @onclick="BeginSignin">Commencer</button>
+                    style="background-color:#AD0000;border-color: #9B0000;" @onclick="BeginSignin">Commencer</button>
                 </NotAuthorized>
             </AuthorizeView>
         </div>
     </div>
 }
 @code {
-    private Hero[] heros;
+    private Hero[] heroes;
 
     protected override async Task OnInitializedAsync()
     {
-        heros = await Http.GetFromJsonAsync<Hero[]>("https://localhost:5001/Hero");
+        heroes = await Http.GetFromJsonAsync<Hero[]>("https://luckyfightcs.alwaysdata.net/Hero");
     }
     private async Task NavigateToMesPerso(MouseEventArgs args)
     {

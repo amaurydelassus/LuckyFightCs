@@ -5,7 +5,7 @@
 <h1>Les champions</h1>
 <p>Voici la liste des heros</p>
 
-@if (@heros == null)
+@if (@heroes == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -22,24 +22,24 @@ else
             </tr>
         </thead>
         <tbody>
-            @for (var @i = 0; i < heros.Count(); i++)
+            @for (var @i = 0; i < heroes.Count(); i++)
             {
                 <tr>
                     <td>@(i+1)</td>
-                    <td>@heros[i].Name</td>
-                    <td>@heros[i].Pv</td>
-                    <td>@heros[i].Atk</td>
-                    <td>@heros[i].NbFights</td>
+                    <td>@heroes[i].Name</td>
+                    <td>@heroes[i].Pv</td>
+                    <td>@heroes[i].Atk</td>
+                    <td>@heroes[i].NbFights</td>
                 </tr>
             }
         </tbody>
     </table>
 }
 @code {
-    private Hero[] heros;
+    private Hero[] heroes;
 
     protected override async Task OnInitializedAsync()
     {
-        heros = await Http.GetFromJsonAsync<Hero[]>("https://localhost:5001/Hero");
+        heroes = await Http.GetFromJsonAsync<Hero[]>("https://luckyfightcs.alwaysdata.net/Hero");
     }
 }

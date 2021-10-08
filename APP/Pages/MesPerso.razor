@@ -4,13 +4,13 @@
 @inject NavigationManager Navigation
 @attribute [Authorize]
 <h1>Mes perso</h1>
-@if (@heros == null)
+@if (@heroes == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    if (@heros.Count() != 0)
+    if (@heroes.Count() != 0)
     {
         <table class="table">
             <thead>
@@ -22,17 +22,17 @@ else
                 </tr>
             </thead>
             <tbody>
-                @for (@i = 0; i < heros.Count(); i++)
+                @for (@i = 0; i < heroes.Count(); i++)
                 {
-                    var @linkTrain = $"train/{@heros[i].Id}";
-                    var @id = @heros[i].Id;
+                    var @linkTrain = $"train/{@heroes[i].Id}";
+                    var @id = @heroes[i].Id;
                     <tr>
-                        <td>@heros[i].Name</td>
-                        <td>@heros[i].Pv</td>
-                        <td>@heros[i].Atk</td>
-                        <td>@heros[i].NbFights</td>
+                        <td>@heroes[i].Name</td>
+                        <td>@heroes[i].Pv</td>
+                        <td>@heroes[i].Atk</td>
+                        <td>@heroes[i].NbFights</td>
                         <td>
-                            @if (@heros[i].NbFights == 0)
+                            @if (@heroes[i].NbFights == 0)
                             {
                                 <NavLink class="nav-link text-danger" href=@linkTrain>
                                     <span class="oi oi-heart" aria-hidden="true"></span>
@@ -42,7 +42,7 @@ else
                         </td>
                         <td>
                             <button type="button" class="btn btn-lg text-light"
-                    style="background-color:#AD0000;border-color: #9B0000;" @onclick="()=>delete(id)"><span
+                    style="background-color:#AD0000;border-color: #9B0000;" @onclick="()=>Delete(id)"><span
                         class="oi oi-minus" aria-hidden="true"></span></button>
                         </td>
                     </tr>
@@ -53,13 +53,13 @@ else
     <div class="row justify-content-md-center align-items-end">
         <div class="col-2 text-center">
             <p>
-                <input @bind="HeroName" />
+                <input @bind="heroName" />
             </p>
         </div>
 
         <div class="col-2 text-center">
             <p>
-                <button class="btn btn-primary" @onclick="addHero">Ajouter un Heros</button>
+                <button class="btn btn-primary" @onclick="AddHero">Ajouter un heros</button>
             </p>
         </div>
     </div>
@@ -68,36 +68,36 @@ else
 
 @code {
 
-    private Hero[] heros;
+    private Hero[] heroes;
     private User user;
     private string email = "cc";
     private int i = 0;
-    private string HeroName;
+    private string heroName;
 
 
 
     protected override async Task OnInitializedAsync()
     {
-        user = await Http.GetFromJsonAsync<User>($"https://localhost:5001/User/get/{email}");
-        heros = await Http.GetFromJsonAsync<Hero[]>("https://localhost:5001/Hero/myheroes/" + user.Id);
+        user = await Http.GetFromJsonAsync<User>($"https://luckyfightcs.alwaysdata.net/User/get/{email}");
+        heroes = await Http.GetFromJsonAsync<Hero[]>("https://luckyfightcs.alwaysdata.net/Hero/myheroes/" + user.Id);
     }
 
-    protected async Task delete(int id)
+    protected async Task Delete(int id)
     {
-        var result = await Http.DeleteAsync("https://localhost:5001/Hero/delete/" + id);
+        var result = await Http.DeleteAsync("https://luckyfightcs.alwaysdata.net/Hero/delete/" + id);
         if (result.IsSuccessStatusCode)
         {
             Navigation.NavigateTo("/mesperso", true);
         }
     }
 
-    protected async Task addHero()
+    protected async Task AddHero()
     {
         Hero hero = new Hero();
-        hero.Name = HeroName;
+        hero.Name = heroName;
         hero.User = user;
         hero.Icon = "icon";
-        var result = await Http.PostAsJsonAsync("https://localhost:5001/Hero/new", hero);
+        var result = await Http.PostAsJsonAsync("https://luckyfightcs.alwaysdata.net/Hero/new", hero);
         if (result.IsSuccessStatusCode)
         {
             Navigation.NavigateTo("/mesperso", true);

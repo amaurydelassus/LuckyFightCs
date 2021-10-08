@@ -7,15 +7,15 @@
 <div class="row justify-content-md-center align-items-end">
     @if (choix)
     {
-        @if (@heros == null)
+        @if (@heroes == null)
         {
             <p><em>Loading...</em></p>
         }
         else
         {
-            if (@heros.Count() != 0)
+            if (@heroes.Count() != 0)
             {
-                @for (@i = 0; i < heros.Count(); i++)
+                @for (@i = 0; i < heroes.Count(); i++)
                 {
                     var @id = i;
                     <div class="col-2 text-center">
@@ -24,24 +24,24 @@
                             <tbody>
                                 <tr>
                                     <th scope="row">Nom</th>
-                                    <td>@heros[i].Name</td>
+                                    <td>@heroes[i].Name</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">PV</th>
-                                    <td>@heros[i].Pv</td>
+                                    <td>@heroes[i].Pv</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Attaque</th>
-                                    <td>@heros[i].Atk</td>
+                                    <td>@heroes[i].Atk</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Nombre de Combats</th>
-                                    <td>@heros[i].NbFights</td>
+                                    <td>@heroes[i].NbFights</td>
                                 </tr>
                             </tbody>
                         </div>
                         <div>
-                            @if (@heros[i].NbFights > 0)
+                            @if (@heroes[i].NbFights > 0)
                             {
                                 <div>Désolé, il a déja eu sa chance !</div>
                             }
@@ -67,8 +67,8 @@
         else
         {
             <p class="font-weight-bold text-success">Tu as gagné @currentCount points de vie !</p>
-            <button class="btn btn-warning font-weight-bold" @onclick="()=>Update()">Ok @HeroId</button>
-            <button type="button" class="btn btn-danger" @onclick="()=>MakeChoice(HeroId)">RePlay</button>
+            <button class="btn btn-warning font-weight-bold" @onclick="()=>Update()">Ok @heroId</button>
+            <button type="button" class="btn btn-danger" @onclick="()=>MakeChoice(heroId)">RePlay</button>
         }
 
     }
@@ -78,10 +78,10 @@
 @code {
     private int currentCount = 0;
     private bool choix = true;
-    private int HeroId = 0;
+    private int heroId = 0;
     private bool trying = true;
 
-    private Hero[] heros;
+    private Hero[] heroes;
     private User user;
     private string email = "cc";
     private int i = 0;
@@ -90,8 +90,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        user = await Http.GetFromJsonAsync<User>($"https://localhost:5001/User/get/{email}");
-        heros = await Http.GetFromJsonAsync<Hero[]>("https://localhost:5001/Hero/myheroes/" + user.Id);
+        user = await Http.GetFromJsonAsync<User>($"https://luckyfightcs.alwaysdata.net/User/get/{email}");
+        heroes = await Http.GetFromJsonAsync<Hero[]>("https://luckyfightcs.alwaysdata.net/Hero/myheroes/" + user.Id);
     }
 
     private void IncrementCount()
@@ -100,9 +100,9 @@
     }
     protected async Task Update()
     {
-        var hero = heros[HeroId];
+        var hero = heroes[heroId];
         hero.Pv = currentCount;
-        var result = await Http.PutAsJsonAsync("https://localhost:5001/Hero/update/" + hero.Id, hero);
+        var result = await Http.PutAsJsonAsync("https://luckyfightcs.alwaysdata.net/Hero/update/" + hero.Id, hero);
         if (result.IsSuccessStatusCode)
         {
             Navigation.NavigateTo("/train", true);
@@ -114,10 +114,9 @@
     {
         trying = true;
         currentCount = 0;
-        HeroId = id;
+        heroId = id;
         choix = false;
         await Task.Delay(5000);
         trying = false;
-        //ensuite on peut update le héro en remplaçant db.Heroes[i].pv = currentCount
     }
 }
