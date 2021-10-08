@@ -1,7 +1,6 @@
 @page "/mesperso"
 @inject HttpClient Http
 @using APP.Models
-@using System.Diagnostics
 @inject NavigationManager Navigation
 @attribute [Authorize]
 <h1>Mes perso</h1>
@@ -25,36 +24,78 @@ else
             <tbody>
                 @for (@i = 0; i < heros.Count(); i++)
                 {
-                    var @link = $"train/{@heros[i].Id}";
+                    var @linkTrain = $"train/{@heros[i].Id}";
+                    var @id = @heros[i].Id;
                     <tr>
                         <td>@heros[i].Name</td>
                         <td>@heros[i].Pv</td>
                         <td>@heros[i].Atk</td>
                         <td>@heros[i].NbFights</td>
                         <td> 
-                            <NavLink class="nav-link text-danger" href=@link>
+                            <NavLink class="nav-link text-danger" href=@linkTrain>
                                 <span class="oi oi-heart" aria-hidden="true"></span>
                             </NavLink>
+                        </td>                        
+                        <td> 
+                            <button type="button" class="btn btn-lg text-light"
+                                style="background-color:#AD0000;border-color: #9B0000;" @onclick="()=>delete(id)"><span class="oi oi-minus" aria-hidden="true"></span></button>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     }
-}
-@code {
-    private Hero[] heros;
+    <div class="row justify-content-md-center align-items-end">
+        <div class="col-2 text-center">
+            <p>
+                <input @bind="HeroName" />
+            </p>
+        </div>
 
+        <div class="col-2 text-center">
+            <p>
+                <button class="btn btn-primary" @onclick="addHero">Ajouter un Heros</button>
+            </p>
+        </div>
+    </div>
+}
+
+
+@code {
+
+    private Hero[] heros;
+    private User user;
+    private string email = "cc";
     private int i = 0;
+    private string HeroName;
+
+
 
     protected override async Task OnInitializedAsync()
     {
-        heros = await Http.GetFromJsonAsync<Hero[]>("https://localhost:5001/Hero/myheroes/1");
+        user = await Http.GetFromJsonAsync<User>($"https://localhost:5001/User/get/{email}");
+        heros = await Http.GetFromJsonAsync<Hero[]>("https://localhost:5001/Hero/myheroes/"+user.Id);
     }
 
-    private async Task TrainNavigate(MouseEventArgs args, int id)
+    protected async Task delete(int id)
     {
-        Console.WriteLine(heros[i]);
-        Navigation.NavigateTo("train");
+        var result = await Http.DeleteAsync("https://localhost:5001/Hero/delete/"+id);
+        if(result.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo("/mesperso",true);
+        }
+    }
+
+    protected async Task addHero()
+    {
+        Hero hero = new Hero();
+        hero.Name = HeroName;
+        hero.User = user;
+        hero.Icon = "icon";
+        var result = await Http.PostAsJsonAsync("https://localhost:5001/Hero/new",hero);
+        if(result.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo("/mesperso",true);
+        }
     }
 }

@@ -1,50 +1,113 @@
 @page "/train"
 @inject HttpClient Http
+@using Models
+@inject NavigationManager Navigation
 @attribute [Authorize]
 <h1>S'entraîner</h1>
-
-@if (choix == 0)
-{
-    <div class="container">
-        <div class="row">
-            <div class="column">Choisis un héro : </div>
-            <div class="column"><button class="btn btn-primary" @onclick="MakeChoice">Choix</button></div>
-        </div>
-    </div>
-}
-else
-{
-    if (trying)
+<div class="row justify-content-md-center align-items-end">
+    @if (choix)
     {
-        <p> + @currentCount points de vie !</p>
-        <button class="btn btn-warning font-weight-bold" @onclick="IncrementCount">S'entraîner</button>
+        @if (@heros == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            if(@heros.Count() != 0)
+            {
+                @for (@i = 0; i < heros.Count(); i++)
+                {
+                    var @linkTrain = $"train/{@heros[i].Id}";
+                    var @id = @heros[i].Id;
+                    <div class="col-2 text-center">
+                        <img src="./carte.png" class="img-fluid" alt="Responsive image">
+                        <div>
+                            <tbody>
+                                <tr>
+                                <th scope="row">Nom</th>
+                                <td>@heros[i].Name</td>
+                                </tr>
+                                <tr>
+                                <th scope="row">PV</th>
+                                <td>@heros[i].Pv</td>
+                                </tr>
+                                <tr>
+                                <th scope="row">Attaque</th>
+                                <td>@heros[i].Atk</td>
+                                </tr>
+                                <tr>
+                                <th scope="row">Nombre de Combats</th>
+                                <td>@heros[i].NbFights</td>
+                                </tr>
+                            </tbody>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-danger"@onclick="()=>MakeChoice(id)">Play</button>
+                        </div>
+                    </div>
+
+                }
+            }
+        }
     }
     else
     {
-        <p class="font-weight-bold text-success">Tu as gagné @currentCount points de vie !</p>
+        if (trying)
+        {
+            <p> + @currentCount points de vie !</p>
+            <button class="btn btn-warning font-weight-bold" @onclick="IncrementCount">S'entraîner</button>
+        }
+        else
+        {
+            <p class="font-weight-bold text-success">Tu as gagné @currentCount points de vie !</p>
+            <button class="btn btn-warning font-weight-bold" @onclick="()=>Update(HeroId)">Ok</button>
+            <button type="button" class="btn btn-danger"@onclick="()=>MakeChoice(HeroId)">RePlay</button>
+        }
+
     }
-
-}
-
-
-
+</div>
 
 
 @code {
     private int currentCount = 0;
-
-    private int choix = 0;
-
+    private bool choix = true;
+    private int HeroId = 0;
     private bool trying = true;
+
+    private Hero[] heros;
+    private User user;
+    private string email = "cc";
+    private int i = 0;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await Http.GetFromJsonAsync<User>($"https://localhost:5001/User/get/{email}");
+        heros = await Http.GetFromJsonAsync<Hero[]>("https://localhost:5001/Hero/myheroes/"+user.Id);
+    }
 
     private void IncrementCount()
     {
         currentCount++;
     }
-
-    private async void MakeChoice()
+    protected async Task Update(int id)
     {
-        choix = 1; //choix = id du héro
+        var hero = heros[id];
+        hero.Pv = hero.Pv + currentCount;
+        var result = await Http.PostAsJsonAsync("https://localhost:5001/Heros/name/"+id,hero);
+        if(result.IsSuccessStatusCode)
+        {
+            choix = true;
+        }
+    }
+
+    private async void MakeChoice(int id)
+    {
+        trying = true;
+        currentCount = 0;
+        HeroId = id;
+        choix = false;
         await Task.Delay(5000);
         trying = false;
         //ensuite on peut update le héro en remplaçant db.Heroes[i].pv = currentCount
