@@ -148,7 +148,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        [Route("name/{id}")]
+        [Route("update/{id}")]
         public IActionResult UpdateName(int id, Hero hero)
         {
             using (var db = new DatabaseContext())
