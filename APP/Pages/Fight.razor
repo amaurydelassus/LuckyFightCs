@@ -39,7 +39,9 @@
                     </tbody>
                 </div>
             </div>
-
+            <div class="col-2 text-center">
+                <img src="./vs.png" class="img-fluid" alt="Responsive image">
+            </div>
             if (@heros.Count() != 0)
             {
                 @for (@i = 0; i < heros.Count(); i++)
@@ -149,16 +151,16 @@
     {
         currentCount++;
     }
-    @* protected async Task Update(int id)
-        {
-        var hero = heros[id];
-        hero.Pv = hero.Pv + currentCount;
-        var result = await Http.PostAsJsonAsync("https://localhost:5001/Heros/name/" + id, hero);
+    protected async Task Update()
+    {
+        var hero = heros[HeroId];
+        hero.Pv = currentCount;
+        var result = await Http.PutAsJsonAsync("https://localhost:5001/Hero/update/" + hero.Id, hero);
         if (result.IsSuccessStatusCode)
         {
-        choix = true;
+            Navigation.NavigateTo("/train", true);
         }
-        } *@
+    }
 
     private async Task Return()
     {
