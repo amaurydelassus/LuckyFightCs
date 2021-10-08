@@ -1,5 +1,9 @@
 @page "/about"
-<h1>A propos</h1>
+@inject HttpClient Http
+@using Models
+@inject NavigationManager Navigation
+@attribute [Authorize]
+<h1>Combattre contre le champion</h1>
 
 <div>
     <h5><em>LuckyFight</em> est un petit jeu développé par Amaury Dellassus et Mara Berlow avec
