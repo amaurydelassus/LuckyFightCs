@@ -96,7 +96,7 @@
     {
         user = await Http.GetFromJsonAsync<User>($"https://luckyfightcs.alwaysdata.net/User/get/{email}");
         champion = await Http.GetFromJsonAsync<Hero>($"https://luckyfightcs.alwaysdata.net/Hero/champion");
-        heroes = await Http.GetFromJsonAsync<Hero[]>("https://luckyfightcs.alwaysdata.net/myheroes/" + user.Id);
+        heroes = await Http.GetFromJsonAsync<Hero[]>("https://luckyfightcs.alwaysdata.net/Hero/myheroes/" + user.Id);
     }
 
 

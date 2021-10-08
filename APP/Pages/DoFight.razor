@@ -4,113 +4,113 @@
 @inject NavigationManager Navigation
 @attribute [Authorize]
 <h1>Fight !</h1>
-    @if (@hero == null)
-    {
-        <p><em>Loading...</em></p>
-    }
-    else
-    {
-        <div class="row justify-content-md-center align-items-end">
-            <div class="col-3 text-center">
-                <img src="./carte.png" class="img-fluid" alt="Responsive image">
-                <div>
-                    <tbody>
-                        <tr>
-                            <th scope="row">Nom</th>
-                            <td>@champion.Name</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">PV</th>
-                            <td>@champion.Pv</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Attaque</th>
-                            <td>@champion.Atk</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Nombre de Combats</th>
-                            <td>@champion.NbFights</td>
-                        </tr>
-                    </tbody>
-                </div>
-            </div>
-            <div class="col-2 text-center">
-                <img src="./vs.png" class="img-fluid" alt="Responsive image">
-                <br><br><br><br>
-                @if (choix)
-                {
-                    <button type="button" class="btn btn-lg text-light" style="background-color:#AD0000;border-color: #9B0000;"
-                    @onclick="Fight"><img src="./logo.png" class="img-fluid" alt="Responsive image"></button>
-                }
-                else
-                {
-                    <br><br>
-                }
-            </div>
-            <div class="col-3 text-center">
-                <img src="./carte.png" class="img-fluid" alt="Responsive image">
-                <div>
-                    <tbody>
-                        <tr>
-                            <th scope="row">Nom</th>
-                            <td>@hero.Name</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">PV</th>
-                            <td>@hero.Pv</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Attaque</th>
-                            <td>@hero.Atk</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Nombre de Combats</th>
-                            <td>@hero.NbFights</td>
-                        </tr>
-                    </tbody>
-                </div>
+@if (@hero == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row justify-content-md-center align-items-end">
+        <div class="col-3 text-center">
+            <img src="./carte.png" class="img-fluid" alt="Responsive image">
+            <div>
+                <tbody>
+                    <tr>
+                        <th scope="row">Nom</th>
+                        <td>@champion.Name</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">PV</th>
+                        <td>@champion.Pv</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Attaque</th>
+                        <td>@champion.Atk</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Nombre de Combats</th>
+                        <td>@champion.NbFights</td>
+                    </tr>
+                </tbody>
             </div>
         </div>
-    }
-    
-    @if (!choix)
-    {
-        if (trying)
-        {
-            if (yourTurn)
+        <div class="col-2 text-center">
+            <img src="./vs.png" class="img-fluid" alt="Responsive image">
+            <br><br><br><br>
+            @if (choix)
             {
-                <div class="row justify-content-md-center align-items-end">
-                    <p>@damage</p>
-                </div>
-                <div class="row justify-content-md-center align-items-end">
-                    <button class="btn btn-warning font-weight-bold" @onclick="()=>SwitchTurn()">Continuer</button>
-                </div>
-
+                <button type="button" class="btn btn-lg text-light" style="background-color:#AD0000;border-color: #9B0000;"
+            @onclick="Fight"><img src="./logo.png" class="img-fluid" alt="Responsive image"></button>
             }
             else
             {
-                <div class="row justify-content-md-center align-items-end">
-                    <p>@damage</p>
-                </div>
-                <div class="row justify-content-md-center align-items-end">
-                    <button class="btn btn-warning font-weight-bold" @onclick="()=>SwitchTurn()">Continuer</button>
-                </div>
+                <br><br>
             }
+        </div>
+        <div class="col-3 text-center">
+            <img src="./carte.png" class="img-fluid" alt="Responsive image">
+            <div>
+                <tbody>
+                    <tr>
+                        <th scope="row">Nom</th>
+                        <td>@hero.Name</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">PV</th>
+                        <td>@hero.Pv</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Attaque</th>
+                        <td>@hero.Atk</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Nombre de Combats</th>
+                        <td>@hero.NbFights</td>
+                    </tr>
+                </tbody>
+            </div>
+        </div>
+    </div>
+}
+
+@if (!choix)
+{
+    if (trying)
+    {
+        if (yourTurn)
+        {
+            <div class="row justify-content-md-center align-items-end">
+                <p>@damage</p>
+            </div>
+            <div class="row justify-content-md-center align-items-end">
+                <button class="btn btn-warning font-weight-bold" @onclick="()=>SwitchTurn()">Continuer</button>
+            </div>
+
         }
         else
         {
-            if (@win)
-            {
-                <p class="font-weight-bold text-success">Félicitation tu es le nouveau champion !</p>
-            }
-            else
-            {
-                <p>Tu as perdu... La honte s'abat sur toi et ta famille...</p>
-                <button class="btn btn-warning font-weight-bold" @onclick="()=>Return()">Retour à l'accueil</button>
-                <button type="button" class="btn btn-danger" @onclick="()=>Delete()">Supprimer mon héro</button>
-            }
+            <div class="row justify-content-md-center align-items-end">
+                <p>@damage</p>
+            </div>
+            <div class="row justify-content-md-center align-items-end">
+                <button class="btn btn-warning font-weight-bold" @onclick="()=>SwitchTurn()">Continuer</button>
+            </div>
         }
     }
+    else
+    {
+        if (@win)
+        {
+            <p class="font-weight-bold text-success">Félicitation tu es le nouveau champion !</p>
+        }
+        else
+        {
+            <p>Tu as perdu... La honte s'abat sur toi et ta famille...</p>
+            <button class="btn btn-warning font-weight-bold" @onclick="()=>Return()">Retour à l'accueil</button>
+            <button type="button" class="btn btn-danger" @onclick="()=>Delete()">Supprimer mon héro</button>
+        }
+    }
+}
 
 @code {
     [Parameter]
@@ -129,8 +129,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        champion = await Http.GetFromJsonAsync<Hero>($"https://localhost:5001/Hero/champion");
-        hero = await Http.GetFromJsonAsync<Hero>($"https://localhost:5001/Hero/onehero/"+id);
+        champion = await Http.GetFromJsonAsync<Hero>($"https://luckyfightcs.alwaysdata.net/Hero/champion");
+        hero = await Http.GetFromJsonAsync<Hero>($"https://luckyfightcs.alwaysdata.net/Hero/onehero/" + id);
     }
 
     private void IncrementCount()
@@ -140,7 +140,7 @@
     protected async Task Update()
     {
         hero.Pv = currentCount;
-        var result = await Http.PutAsJsonAsync("https://localhost:5001/Hero/update/" + hero.Id, hero);
+        var result = await Http.PutAsJsonAsync("https://luckyfightcs.alwaysdata.net/Hero/update/" + hero.Id, hero);
         if (result.IsSuccessStatusCode)
         {
             Navigation.NavigateTo("/train", true);
@@ -159,7 +159,7 @@
 
     protected async Task Delete()
     {
-        var result = await Http.DeleteAsync("https://localhost:5001/Hero/delete/" + id);
+        var result = await Http.DeleteAsync("https://luckyfightcs.alwaysdata.net/Hero/delete/" + id);
         if (result.IsSuccessStatusCode)
         {
             Navigation.NavigateTo("/mesperso", true);
@@ -169,44 +169,45 @@
     private async void Fight()
     {
         choix = false;
-            int pvChamp = champion.Pv;
-            int pvHero = hero.Pv;
-            int degat = 0;
-            Random rnd = new Random();
-            trying = true;
+        int pvChamp = champion.Pv;
+        int pvHero = hero.Pv;
+        int degat = 0;
+        Random rnd = new Random();
+        trying = true;
 
-            //incrémenter les nombres de fights
-            hero.NbFights = hero.NbFights + 1;
-            champion.NbFights = champion.NbFights + 1;
-            var resultHero = await Http.PostAsJsonAsync("https://localhost:5001/Hero/update/" + id, hero);
-            var resultChamp = await Http.PostAsJsonAsync("https://localhost:5001/Hero/update/" + champion.Id, champion);
+        //incrémenter les nombres de fights
+        hero.NbFights = hero.NbFights + 1;
+        champion.NbFights = champion.NbFights + 1;
+        var resultHero = await Http.PostAsJsonAsync("https://luckyfightcs.alwaysdata.net/Hero/update/" + id, hero);
+        var resultChamp = await Http.PostAsJsonAsync("https://luckyfightcs.alwaysdata.net/Hero/update/" + champion.Id,
+        champion);
 
-            while (pvChamp * pvHero > 0)
+        while (pvChamp * pvHero > 0)
+        {
+            if (yourTurn)
             {
-                if (yourTurn)
-                {
                 degat = hero.Atk + rnd.Next(6);
                 damage = $"Ton héro {hero.Name} inflige {degat} au champion !";
                 pvChamp = pvChamp - degat;
-                }
-                else
-                {
+            }
+            else
+            {
                 degat = champion.Atk + rnd.Next(6);
                 damage = $"Le champion {champion.Name} inflige {degat} à ton héro !";
                 pvHero = pvHero - degat;
-                }
             }
+        }
 
-            if (pvHero > 0)
-            {
+        if (pvHero > 0)
+        {
             win = true;
 
             //inverser le champion
             hero.IsChampion = true;
             champion.IsChampion = false;
-            //resultHero = await Http.PostAsJsonAsync("https://localhost:5001/Hero/update/" + id, hero);
-            //resultChamp = await Http.PostAsJsonAsync("https://localhost:5001/Hero/update/" + champion.Id, champion);
+            resultHero = await Http.PostAsJsonAsync("https://luckyfightcs.alwaysdata.net/Hero/update/" + id, hero);
+            resultChamp = await Http.PostAsJsonAsync("https://luckyfightcs.alwaysdata.net/Hero/update/" + champion.Id, champion);
 
-            }
+        }
     }
 }

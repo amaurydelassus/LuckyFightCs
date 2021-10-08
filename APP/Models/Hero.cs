@@ -10,9 +10,9 @@ namespace APP.Models
 
         public string Icon { get; set; }
 
-        public int Pv { get; set; } = 5000;
+        public int Pv { get; set; } = 20;
 
-        public int Atk { get; set; } = 2000;
+        public int Atk { get; set; } = 1;
 
         public bool IsSwag { get; set; } = false;
 
