@@ -6,128 +6,82 @@
 <h1>Fight !</h1>
 
 <div class="row justify-content-md-center align-items-end">
-
-    @if (choix)
+    @if (@heros == null)
     {
-        @if (@heros == null)
-        {
-            <p><em>Loading...</em></p>
-        }
-        else
-        {
-            <div class="col-2 text-center">
-                <h5>Le champion !</h5>
-                <img src="./carte.png" class="img-fluid" alt="Responsive image">
-                <div>
-                    <tbody>
-                        <tr>
-                            <th scope="row">Nom</th>
-                            <td>@champion.Name</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">PV</th>
-                            <td>@champion.Pv</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Attaque</th>
-                            <td>@champion.Atk</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Nombre de Combats</th>
-                            <td>@champion.NbFights</td>
-                        </tr>
-                    </tbody>
-                </div>
-            </div>
-
-            if (@heros.Count() != 0)
-            {
-                @for (@i = 0; i < heros.Count(); i++)
-                {
-                    var @linkTrain = $"fight/{@heros[i].Id}";
-                    if (@heros[i].NbFights == 0)
-                    {
-                        var @id = @heros[i].Id;
-                        <div class="col-2 text-center">
-                            <img src="./carte.png" class="img-fluid" alt="Responsive image">
-                            <div>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">Nom</th>
-                                        <td>@heros[i].Name</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">PV</th>
-                                        <td>@heros[i].Pv</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Attaque</th>
-                                        <td>@heros[i].Atk</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Nombre de Combats</th>
-                                        <td>@heros[i].NbFights</td>
-                                    </tr>
-                                </tbody>
-                            </div>
-                            <div>
-                                <button type="button" class="btn btn-lg text-light" style="background-color:#AD0000;border-color: #9B0000;"
-                @onclick="()=>DoFight(id)"><span class="oi oi-minus" aria-hidden="true"></span></button>
-
-                            </div>
-                        </div>
-                    }
-
-
-                }
-            }
-        }
+        <p><em>Loading...</em></p>
     }
     else
     {
-        if (trying)
+        <div class="col-3 text-center">
+            <img src="./carte.png" class="img-fluid" alt="Responsive image">
+            <div>
+                <tbody>
+                    <tr>
+                        <th scope="row">Nom</th>
+                        <td>@champion.Name</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">PV</th>
+                        <td>@champion.Pv</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Attaque</th>
+                        <td>@champion.Atk</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Nombre de Combats</th>
+                        <td>@champion.NbFights</td>
+                    </tr>
+                </tbody>
+            </div>
+        </div>
+        <div class="col-2 text-center">
+            <img src="./vs.png" class="img-fluid" alt="Responsive image">
+        </div>
+        if (@heros.Count() != 0)
         {
-            if (yourTurn)
+            @for (@i = 0; i < heros.Count(); i++)
             {
-                <h6>Ton tour</h6>
-                <p>@damage</p>
-                <button class="btn btn-warning font-weight-bold" @onclick="()=>SwitchTurn()">Continuer</button>
-            }
-            else
-            {
-                <h6>Le tour du champion</h6>
-                <p>@damage</p>
-                <button class="btn btn-warning font-weight-bold" @onclick="()=>SwitchTurn()">Continuer</button>
+                var @linkTrain = $"fight/{@heros[i].Id}";
+                if (@heros[i].NbFights == 0)
+                {
+                    var @id = @heros[i].Id;
+                    <div class="col-2 text-center">
+                        <img src="./carte.png" class="img-fluid" alt="Responsive image">
+                        <div>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Nom</th>
+                                    <td>@heros[i].Name</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">PV</th>
+                                    <td>@heros[i].Pv</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Attaque</th>
+                                    <td>@heros[i].Atk</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Nombre de Combats</th>
+                                    <td>@heros[i].NbFights</td>
+                                </tr>
+                            </tbody>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-lg text-light" style="background-color:#AD0000;border-color: #9B0000;"
+                                @onclick="()=>DoFight(id)"><img src="./logo.png" class="img-fluid" alt="Responsive image"></button>
+
+                        </div>
+                    </div>
+                }
             }
         }
-        else
-        {
-            if (@win)
-            {
-                <p class="font-weight-bold text-success">Félicitation tu es le nouveau champion !</p>
-            }
-            else
-            {
-                <p>Tu as perdu... La honte s'abat sur toi et ta famille...</p>
-                <button class="btn btn-warning font-weight-bold" @onclick="()=>Return()">Retour à l'accueil</button>
-                <button type="button" class="btn btn-danger" @onclick="()=>Delete(HeroId)">Supprimer mon héro</button>
-            }
-
-
-        }
-
     }
 </div>
 
 
 @code {
-    private bool win = false;
-    private int currentCount = 0;
-    private bool choix = true;
-    private int HeroId = 0;
-    private bool trying = true;
-    private bool yourTurn = false;
-    private string damage = "";
 
     private Hero champion;
 
@@ -140,89 +94,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        champion = await Http.GetFromJsonAsync<Hero>($"https://localhost:5001/Hero/champion");
         user = await Http.GetFromJsonAsync<User>($"https://localhost:5001/User/get/{email}");
+        champion = await Http.GetFromJsonAsync<Hero>($"https://localhost:5001/Hero/champion");
         heros = await Http.GetFromJsonAsync<Hero[]>("https://localhost:5001/Hero/myheroes/" + user.Id);
     }
 
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
-    @* protected async Task Update(int id)
-        {
-        var hero = heros[id];
-        hero.Pv = hero.Pv + currentCount;
-        var result = await Http.PostAsJsonAsync("https://localhost:5001/Heros/name/" + id, hero);
-        if (result.IsSuccessStatusCode)
-        {
-        choix = true;
-        }
-        } *@
-
-    private async Task Return()
-    {
-        Navigation.NavigateTo("/");
-    }
-
-    private void SwitchTurn()
-    {
-        yourTurn = !yourTurn;
-        //continue combat
-    }
-
-    protected async Task Delete(int id)
-    {
-        var result = await Http.DeleteAsync("https://localhost:5001/Hero/delete/" + id);
-        if (result.IsSuccessStatusCode)
-        {
-            Navigation.NavigateTo("/mesperso", true);
-        }
-    }
 
     private async void DoFight(int id)
     {
-        choix = true;
-        @* Hero hero = heros[id];
-            int pvChamp = champion.Pv;
-            int pvHero = hero.Pv;
-            int degat = 0;
-            Random rnd = new Random();
-            trying = true;
-
-            //incrémenter les nombres de fights
-            hero.NbFights = hero.NbFights + 1;
-            champion.NbFights = champion.NbFights + 1;
-            //var resultHero = await Http.PostAsJsonAsync("https://localhost:5001/Heros/name/" + id, hero);
-            //var resultChamp = await Http.PostAsJsonAsync("https://localhost:5001/Heros/name/" + champion.Id, champion);
-
-            while (pvChamp * pvHero > 0)
-            {
-
-            if (yourTurn)
-            {
-            degat = hero.Atk + rnd.Next(6);
-            damage = $"Ton héro {hero.Name} inflige {degat} au champion !";
-            pvChamp = pvChamp - degat;
-            }
-            else
-            {
-            degat = champion.Atk + rnd.Next(6);
-            damage = $"Le champion {champion.Name} inflige {degat} à ton héro !";
-            pvHero = pvHero - degat;
-            }
-            }
-
-            if (pvHero > 0)
-            {
-            win = true;
-
-            //inverser le champion
-            hero.IsChampion = true;
-            champion.IsChampion = false;
-            //resultHero = await Http.PostAsJsonAsync("https://localhost:5001/Heros/name/" + id, hero);
-            //resultChamp = await Http.PostAsJsonAsync("https://localhost:5001/Heros/name/" + champion.Id, champion);
-
-            } *@
+        Navigation.NavigateTo("fight/"+id);
     }
 }

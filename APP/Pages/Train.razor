@@ -17,7 +17,6 @@
             {
                 @for (@i = 0; i < heros.Count(); i++)
                 {
-                    var @linkTrain = $"train/{@heros[i].Id}";
                     var @id = i;
                     <div class="col-2 text-center">
                         <img src="./carte.png" class="img-fluid" alt="Responsive image">
@@ -103,7 +102,7 @@
     {
         var hero = heros[HeroId];
         hero.Pv = currentCount;
-        var result = await Http.PutAsJsonAsync("https://localhost:5001/Hero/name/" + hero.Id, hero);
+        var result = await Http.PutAsJsonAsync("https://localhost:5001/Hero/update/" + hero.Id, hero);
         if (result.IsSuccessStatusCode)
         {
             Navigation.NavigateTo("/train", true);
