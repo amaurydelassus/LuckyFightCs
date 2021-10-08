@@ -13,7 +13,7 @@
         }
         else
         {
-            if(@heros.Count() != 0)
+            if (@heros.Count() != 0)
             {
                 @for (@i = 0; i < heros.Count(); i++)
                 {
@@ -24,25 +24,33 @@
                         <div>
                             <tbody>
                                 <tr>
-                                <th scope="row">Nom</th>
-                                <td>@heros[i].Name</td>
+                                    <th scope="row">Nom</th>
+                                    <td>@heros[i].Name</td>
                                 </tr>
                                 <tr>
-                                <th scope="row">PV</th>
-                                <td>@heros[i].Pv</td>
+                                    <th scope="row">PV</th>
+                                    <td>@heros[i].Pv</td>
                                 </tr>
                                 <tr>
-                                <th scope="row">Attaque</th>
-                                <td>@heros[i].Atk</td>
+                                    <th scope="row">Attaque</th>
+                                    <td>@heros[i].Atk</td>
                                 </tr>
                                 <tr>
-                                <th scope="row">Nombre de Combats</th>
-                                <td>@heros[i].NbFights</td>
+                                    <th scope="row">Nombre de Combats</th>
+                                    <td>@heros[i].NbFights</td>
                                 </tr>
                             </tbody>
                         </div>
                         <div>
-                            <button type="button" class="btn btn-danger"@onclick="()=>MakeChoice(id)">Play</button>
+                            @if (@heros[i].NbFights > 0)
+                            {
+                                <div>Désolé, il a déja eu sa chance !</div>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-danger" @onclick="()=>MakeChoice(id)">Play</button>
+                            }
+
                         </div>
                     </div>
 
@@ -61,7 +69,7 @@
         {
             <p class="font-weight-bold text-success">Tu as gagné @currentCount points de vie !</p>
             <button class="btn btn-warning font-weight-bold" @onclick="()=>Update(HeroId)">Ok</button>
-            <button type="button" class="btn btn-danger"@onclick="()=>MakeChoice(HeroId)">RePlay</button>
+            <button type="button" class="btn btn-danger" @onclick="()=>MakeChoice(HeroId)">RePlay</button>
         }
 
     }
@@ -84,7 +92,7 @@
     protected override async Task OnInitializedAsync()
     {
         user = await Http.GetFromJsonAsync<User>($"https://localhost:5001/User/get/{email}");
-        heros = await Http.GetFromJsonAsync<Hero[]>("https://localhost:5001/Hero/myheroes/"+user.Id);
+        heros = await Http.GetFromJsonAsync<Hero[]>("https://localhost:5001/Hero/myheroes/" + user.Id);
     }
 
     private void IncrementCount()
@@ -95,8 +103,8 @@
     {
         var hero = heros[id];
         hero.Pv = hero.Pv + currentCount;
-        var result = await Http.PostAsJsonAsync("https://localhost:5001/Heros/name/"+id,hero);
-        if(result.IsSuccessStatusCode)
+        var result = await Http.PostAsJsonAsync("https://localhost:5001/Heros/name/" + id, hero);
+        if (result.IsSuccessStatusCode)
         {
             choix = true;
         }

@@ -10,7 +10,7 @@
 }
 else
 {
-    if(@heros.Count() != 0)
+    if (@heros.Count() != 0)
     {
         <table class="table">
             <thead>
@@ -31,14 +31,19 @@ else
                         <td>@heros[i].Pv</td>
                         <td>@heros[i].Atk</td>
                         <td>@heros[i].NbFights</td>
-                        <td> 
-                            <NavLink class="nav-link text-danger" href=@linkTrain>
-                                <span class="oi oi-heart" aria-hidden="true"></span>
-                            </NavLink>
-                        </td>                        
-                        <td> 
+                        <td>
+                            @if (@heros[i].NbFights == 0)
+                            {
+                                <NavLink class="nav-link text-danger" href=@linkTrain>
+                                    <span class="oi oi-heart" aria-hidden="true"></span>
+                                </NavLink>
+
+                            }
+                        </td>
+                        <td>
                             <button type="button" class="btn btn-lg text-light"
-                                style="background-color:#AD0000;border-color: #9B0000;" @onclick="()=>delete(id)"><span class="oi oi-minus" aria-hidden="true"></span></button>
+                    style="background-color:#AD0000;border-color: #9B0000;" @onclick="()=>delete(id)"><span
+                        class="oi oi-minus" aria-hidden="true"></span></button>
                         </td>
                     </tr>
                 }
@@ -74,15 +79,15 @@ else
     protected override async Task OnInitializedAsync()
     {
         user = await Http.GetFromJsonAsync<User>($"https://localhost:5001/User/get/{email}");
-        heros = await Http.GetFromJsonAsync<Hero[]>("https://localhost:5001/Hero/myheroes/"+user.Id);
+        heros = await Http.GetFromJsonAsync<Hero[]>("https://localhost:5001/Hero/myheroes/" + user.Id);
     }
 
     protected async Task delete(int id)
     {
-        var result = await Http.DeleteAsync("https://localhost:5001/Hero/delete/"+id);
-        if(result.IsSuccessStatusCode)
+        var result = await Http.DeleteAsync("https://localhost:5001/Hero/delete/" + id);
+        if (result.IsSuccessStatusCode)
         {
-            Navigation.NavigateTo("/mesperso",true);
+            Navigation.NavigateTo("/mesperso", true);
         }
     }
 
@@ -92,10 +97,10 @@ else
         hero.Name = HeroName;
         hero.User = user;
         hero.Icon = "icon";
-        var result = await Http.PostAsJsonAsync("https://localhost:5001/Hero/new",hero);
-        if(result.IsSuccessStatusCode)
+        var result = await Http.PostAsJsonAsync("https://localhost:5001/Hero/new", hero);
+        if (result.IsSuccessStatusCode)
         {
-            Navigation.NavigateTo("/mesperso",true);
+            Navigation.NavigateTo("/mesperso", true);
         }
     }
 }
