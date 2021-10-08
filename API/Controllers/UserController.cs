@@ -32,11 +32,12 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("new/{email}")]
-        public IActionResult PostUser(string email)
+        public IActionResult PostUser(User user, string email)
         {
             using (var db = new DatabaseContext())
             {
-                User user = { 0, email };
+                user.Id = 0;
+                user.Email = email;
                 db.Users.Add (user);
                 db.SaveChanges();
                 return Ok($"User {user.Id} added");
@@ -54,7 +55,7 @@ namespace API.Controllers
                         .Users
                         .Where(u => u.Email == email)
                         .ToList()
-                        .FirstOrDefault(null);
+                        .FirstOrDefault();
                 return user;
             }
         }

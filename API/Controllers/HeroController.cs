@@ -133,12 +133,7 @@ namespace API.Controllers
         {
             using (var db = new DatabaseContext())
             {
-                var hero =
-                    db
-                        .Heroes
-                        .Where(h => h.Id == id)
-                        .ToList()
-                        .FirstOrDefault(null);
+                var hero = db.Heroes.Find(id);
                 if (hero == null)
                 {
                     return NoContent();
