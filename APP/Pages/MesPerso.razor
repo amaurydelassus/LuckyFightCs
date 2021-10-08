@@ -98,9 +98,6 @@ else
         hero.User = user;
         hero.Icon = "icon";
         var result = await Http.PostAsJsonAsync("https://luckyfightcs.alwaysdata.net/Hero/new", hero);
-        if (result.IsSuccessStatusCode)
-        {
-            Navigation.NavigateTo("/mesperso", true);
-        }
+        heroes = await Http.GetFromJsonAsync<Hero[]>("https://luckyfightcs.alwaysdata.net/Hero/myheroes/" + user.Id);
     }
 }

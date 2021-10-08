@@ -4,12 +4,13 @@
 @inject NavigationManager Navigation
 @attribute [Authorize]
 <h1>Fight !</h1>
-@if (@hero == null)
+@if (@hero == null || @champion == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
+
     <div class="row justify-content-md-center align-items-end">
         <div class="col-3 text-center">
             <img src="./carte.png" class="img-fluid" alt="Responsive image">
@@ -21,7 +22,7 @@ else
                     </tr>
                     <tr>
                         <th scope="row">PV</th>
-                        <td>@champion.Pv</td>
+                        <td>@pvChamp</td>
                     </tr>
                     <tr>
                         <th scope="row">Attaque</th>
@@ -57,7 +58,7 @@ else
                     </tr>
                     <tr>
                         <th scope="row">PV</th>
-                        <td>@hero.Pv</td>
+                        <td>@pvHero</td>
                     </tr>
                     <tr>
                         <th scope="row">Attaque</th>
@@ -83,7 +84,7 @@ else
                 <p>@damage</p>
             </div>
             <div class="row justify-content-md-center align-items-end">
-                <button class="btn btn-warning font-weight-bold" @onclick="()=>SwitchTurn()">Continuer</button>
+                <button class="btn btn-warning font-weight-bold" @onclick="()=>hit()">A ton tour - Continuer</button>
             </div>
 
         }
@@ -93,7 +94,7 @@ else
                 <p>@damage</p>
             </div>
             <div class="row justify-content-md-center align-items-end">
-                <button class="btn btn-warning font-weight-bold" @onclick="()=>SwitchTurn()">Continuer</button>
+                <button class="btn btn-warning font-weight-bold" @onclick="()=>hit()">A moi - Continuer</button>
             </div>
         }
     }
@@ -101,13 +102,17 @@ else
     {
         if (@win)
         {
+            <div class="row justify-content-md-center align-items-end">
             <p class="font-weight-bold text-success">Félicitation tu es le nouveau champion !</p>
+            </div>
         }
         else
         {
+            <div class="row justify-content-md-center align-items-end">
             <p>Tu as perdu... La honte s'abat sur toi et ta famille...</p>
             <button class="btn btn-warning font-weight-bold" @onclick="()=>Return()">Retour à l'accueil</button>
             <button type="button" class="btn btn-danger" @onclick="()=>Delete()">Supprimer mon héro</button>
+            </div>
         }
     }
 }
@@ -121,40 +126,27 @@ else
     private bool trying = true;
     private bool yourTurn = false;
     private string damage = "";
-
     private Hero champion;
     private Hero hero;
-
-
-
+    private int degat = 0;
+    private int pvChamp;
+    private int pvHero;
+    Random rnd = new Random();
     protected override async Task OnInitializedAsync()
     {
         champion = await Http.GetFromJsonAsync<Hero>($"https://luckyfightcs.alwaysdata.net/Hero/champion");
         hero = await Http.GetFromJsonAsync<Hero>($"https://luckyfightcs.alwaysdata.net/Hero/onehero/" + id);
-    }
-
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
-    protected async Task Update()
-    {
-        hero.Pv = currentCount;
-        var result = await Http.PutAsJsonAsync("https://luckyfightcs.alwaysdata.net/Hero/update/" + hero.Id, hero);
-        if (result.IsSuccessStatusCode)
+        pvHero = hero.Pv; 
+        pvChamp = champion.Pv;
+        if(hero.Id == champion.Id)
         {
-            Navigation.NavigateTo("/train", true);
-        }
+            Navigation.NavigateTo("/mesperso"); 
+        } 
     }
 
     private async Task Return()
     {
-        Navigation.NavigateTo("/");
-    }
-
-    private void SwitchTurn()
-    {
-        yourTurn = !yourTurn;
+        Navigation.NavigateTo("/mesperso");
     }
 
     protected async Task Delete()
@@ -162,52 +154,48 @@ else
         var result = await Http.DeleteAsync("https://luckyfightcs.alwaysdata.net/Hero/delete/" + id);
         if (result.IsSuccessStatusCode)
         {
-            Navigation.NavigateTo("/mesperso", true);
+            Navigation.NavigateTo("/mesperso");
         }
     }
-
     private async void Fight()
     {
         choix = false;
-        int pvChamp = champion.Pv;
-        int pvHero = hero.Pv;
-        int degat = 0;
-        Random rnd = new Random();
         trying = true;
-
+        pvChamp = champion.Pv;
+        pvHero = hero.Pv;
         //incrémenter les nombres de fights
         hero.NbFights = hero.NbFights + 1;
         champion.NbFights = champion.NbFights + 1;
         var resultHero = await Http.PostAsJsonAsync("https://luckyfightcs.alwaysdata.net/Hero/update/" + id, hero);
         var resultChamp = await Http.PostAsJsonAsync("https://luckyfightcs.alwaysdata.net/Hero/update/" + champion.Id,
         champion);
-
-        while (pvChamp * pvHero > 0)
+    }
+    private async void hit()
+    {
+        degat = hero.Atk + rnd.Next(6);
+        if (yourTurn)
         {
-            if (yourTurn)
-            {
-                degat = hero.Atk + rnd.Next(6);
-                damage = $"Ton héro {hero.Name} inflige {degat} au champion !";
-                pvChamp = pvChamp - degat;
-            }
-            else
-            {
-                degat = champion.Atk + rnd.Next(6);
-                damage = $"Le champion {champion.Name} inflige {degat} à ton héro !";
-                pvHero = pvHero - degat;
-            }
+            damage = $"Ton héro {hero.Name} inflige {degat} au champion !";
+            pvChamp = pvChamp - degat;
+            yourTurn = false;
         }
-
-        if (pvHero > 0)
+        else
         {
-            win = true;
-
-            //inverser le champion
-            hero.IsChampion = true;
-            champion.IsChampion = false;
-            resultHero = await Http.PostAsJsonAsync("https://luckyfightcs.alwaysdata.net/Hero/update/" + id, hero);
-            resultChamp = await Http.PostAsJsonAsync("https://luckyfightcs.alwaysdata.net/Hero/update/" + champion.Id, champion);
-
+            damage = $"Le champion {champion.Name} inflige {degat} à ton héro !";
+            pvHero = pvHero - degat;
+            yourTurn = true;
+        }
+        if (pvChamp * pvHero <= 0)
+        {
+            if(pvChamp <= 0)
+            {
+                win = true;
+                hero.IsChampion = true;
+                champion.IsChampion = false;
+                var resultHero = await Http.PutAsJsonAsync("https://luckyfightcs.alwaysdata.net/Hero/update/" + hero.Id, hero);
+                var resultChamp = await Http.PutAsJsonAsync("https://luckyfightcs.alwaysdata.net/Hero/update/" + champion.Id, champion);
+            }
+            trying = false ; 
         }
     }
 }

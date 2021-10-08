@@ -105,7 +105,7 @@
         var result = await Http.PutAsJsonAsync("https://luckyfightcs.alwaysdata.net/Hero/update/" + hero.Id, hero);
         if (result.IsSuccessStatusCode)
         {
-            Navigation.NavigateTo("/train", true);
+            choix = true;
         }
     }
 
