@@ -183,46 +183,46 @@
     private async void DoFight(int id)
     {
         choix = true;
-        Hero hero = heros[id];
-        int pvChamp = champion.Pv;
-        int pvHero = hero.Pv;
-        int degat = 0;
-        Random rnd = new Random();
-        trying = true;
+        @* Hero hero = heros[id];
+            int pvChamp = champion.Pv;
+            int pvHero = hero.Pv;
+            int degat = 0;
+            Random rnd = new Random();
+            trying = true;
 
-        //incrémenter les nombres de fights
-        hero.NbFights = hero.NbFights + 1;
-        champion.NbFights = champion.NbFights + 1;
-        var resultHero = await Http.PostAsJsonAsync("https://localhost:5001/Heros/name/" + id, hero);
-        var resultChamp = await Http.PostAsJsonAsync("https://localhost:5001/Heros/name/" + champion.Id, champion);
+            //incrémenter les nombres de fights
+            hero.NbFights = hero.NbFights + 1;
+            champion.NbFights = champion.NbFights + 1;
+            //var resultHero = await Http.PostAsJsonAsync("https://localhost:5001/Heros/name/" + id, hero);
+            //var resultChamp = await Http.PostAsJsonAsync("https://localhost:5001/Heros/name/" + champion.Id, champion);
 
-        while (pvChamp * pvHero > 0)
-        {
+            while (pvChamp * pvHero > 0)
+            {
 
             if (yourTurn)
             {
-                degat = hero.Atk + rnd.Next(6);
-                damage = $"Ton héro {hero.Name} inflige {degat} au champion !";
-                pvChamp = pvChamp - degat;
+            degat = hero.Atk + rnd.Next(6);
+            damage = $"Ton héro {hero.Name} inflige {degat} au champion !";
+            pvChamp = pvChamp - degat;
             }
             else
             {
-                degat = champion.Atk + rnd.Next(6);
-                damage = $"Le champion {champion.Name} inflige {degat} à ton héro !";
-                pvHero = pvHero - degat;
+            degat = champion.Atk + rnd.Next(6);
+            damage = $"Le champion {champion.Name} inflige {degat} à ton héro !";
+            pvHero = pvHero - degat;
             }
-        }
+            }
 
-        if (pvHero > 0)
-        {
+            if (pvHero > 0)
+            {
             win = true;
 
             //inverser le champion
             hero.IsChampion = true;
             champion.IsChampion = false;
-            resultHero = await Http.PostAsJsonAsync("https://localhost:5001/Heros/name/" + id, hero);
-            resultChamp = await Http.PostAsJsonAsync("https://localhost:5001/Heros/name/" + champion.Id, champion);
+            //resultHero = await Http.PostAsJsonAsync("https://localhost:5001/Heros/name/" + id, hero);
+            //resultChamp = await Http.PostAsJsonAsync("https://localhost:5001/Heros/name/" + champion.Id, champion);
 
-        }
+            } *@
     }
 }
